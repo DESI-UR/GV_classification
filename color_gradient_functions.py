@@ -123,7 +123,7 @@ def flux_from_pogson_mag(mag):
     return f
 
 
-def extract_cog_data(iauname, sdss_filter, DATA_FOLDER):
+def extract_cog_data(iauname, subdir, pid, sdss_filter, DATA_FOLDER):
 
     '''
     
@@ -153,7 +153,10 @@ def extract_cog_data(iauname, sdss_filter, DATA_FOLDER):
     
     '''
 
-    fn = DATA_FOLDER + '/' + iauname + '-8-' + sdss_filter + '-cog.fits'
+
+    fn = DATA_FOLDER + '/' + subdir + '/atlases/' + str(pid) + '/' + iauname +'-' + str(pid) + '-' + sdss_filter + '-cog.fits'
+
+    # fn = DATA_FOLDER + '/' + iauname + '-8-' + sdss_filter + '-cog.fits'
 
     try:
 

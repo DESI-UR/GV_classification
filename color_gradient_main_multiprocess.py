@@ -4,6 +4,12 @@ Calculate color gradient for NSA galaxies
 
 '''
 
+
+import sys
+
+start_index = int(sys.argv[1])
+end_index = int(sys.argv[2])
+
 ################################################################################
 # IMPORTS
 ################################################################################
@@ -41,10 +47,12 @@ COV_FOLDER = GV_FOLDER + 'cov_matrices/'
 NSA_FN = '/global/cfs/projectdirs/sdss/data/sdss/dr17/sdss/atlas/v1/nsa_v1_0_1.fits'
 
 # new table save loc
-COG_SAVE_FN = GV_FOLDER + 'nsa_v1_0_1_cd.fits'
+COG_SAVE_FN = GV_FOLDER + 'nsa_v1_0_1_cd_' + str(start_index) + '_' + str(end_index) + '.fits'
 
 # read in nsa table
 NSA = Table.read(NSA_FN, format='fits')
+
+NSA = NSA[start_index:end_index]
 
 
 # add columns to table
