@@ -12,5 +12,4 @@
 source /global/common/software/desi/desi_environment.sh main
 
 #run the application:
-module load parallel
 srun parallel --jobs 110 --link python /global/homes/n/nravi/GV_classification/color_gradient_main_multiprocess.py {1} {2} ::: {0..635579..5831} ::: {5831..641410..5831}
