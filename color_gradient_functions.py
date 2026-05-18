@@ -226,7 +226,7 @@ def plot_curve_of_growth(i_radius, i_flux, g_radius, g_flux, i_mag_fit,
 
 
 
-def calculate_color_gradient(i_flux, g_flux, i_radius, g_radius, Rpet, 
+def calculate_color_gradient(i_flux, g_flux, i_radius, g_radius, Rpet, R90,
                              iauname, PLOT_DIR):
     
 
@@ -250,6 +250,9 @@ def calculate_color_gradient(i_flux, g_flux, i_radius, g_radius, Rpet,
 
     Rpet : float
         petrosian radius in arcsec
+
+    R90: float
+        90% light radius in arcsec
 
     iauname : str
         galaxy iauname
@@ -277,6 +280,18 @@ def calculate_color_gradient(i_flux, g_flux, i_radius, g_radius, Rpet,
         color gradient
     
     '''
+
+    # only consider data points within 2*R90 -- to avoid issues w decreasing cogs
+
+    i_mask = i_radius < 2*R90
+    g_mask = g_radius < 2*R90
+
+    i_flux = i_flux[i_mask]
+    i_radius = i_radius[i_mask]
+
+    g_flux = g_flux[g_mask]
+    g_radius = g_radius[g_mask]
+    
 
     # convert i and g fluxes to pogson magnitudes
 
@@ -339,3 +354,4 @@ def calculate_color_gradient(i_flux, g_flux, i_radius, g_radius, Rpet,
     cd = delta_g - delta_i
 
     return i_mag_fit, i_mag_cov, g_mag_fit, g_mag_cov, cd
+

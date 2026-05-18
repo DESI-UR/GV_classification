@@ -86,6 +86,7 @@ for i in range(len(NSA)):
     subdir = NSA['SUBDIR'][i]
     pid = NSA['PID'][i]
     Rpet = NSA['ELPETRO_THETA'][i]
+    R90 = NSA['ELPETRO_TH90_R'][i]
 
     ############################################################################
     # get curve of growth files
@@ -109,6 +110,7 @@ for i in range(len(NSA)):
                                                                               i_r,
                                                                               g_r,
                                                                               Rpet,
+                                                                              R90,
                                                                               iauname,
                                                                               PLOT_DIR)
         
