@@ -302,11 +302,13 @@ def calculate_color_gradient(i_flux, g_flux, i_radius, g_radius, Rpet, R90,
 
     i_mag_fit, i_mag_cov = curve_fit(SGA_cog, 
                                      i_radius, 
-                                     i_mag)
+                                     i_mag,
+                                    p0 = [np.min(i_mag), np.max(i_mag), 1,1])
     
     g_mag_fit, g_mag_cov = curve_fit(SGA_cog, 
                                      g_radius, 
-                                     g_mag)
+                                     g_mag,
+                                    p0 = [np.min(g_mag), np.max(g_mag), 1,1])
     
     # plot cog
     
