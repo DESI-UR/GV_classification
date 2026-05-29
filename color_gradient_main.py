@@ -25,27 +25,27 @@ from color_gradient_functions import extract_cog_data, calculate_color_gradient
 ################################################################################
 
 
-DATA_FOLDER = '/Users/nityaravi/Documents/Research/RotationCurves/data/'
+DATA_FOLDER = '/global/cfs/projectdirs/sdss/data/sdss/dr17/sdss/atlas/v1/detect/v1_0/'
+GV_FOLDER = '/pscratch/sd/n/nravi/GV_classification/'
 
 # folder with curve of growth files
-COG_FOLDER = DATA_FOLDER + 'nsa/cog/'
+COG_FOLDER = DATA_FOLDER
 
 # location to save plots
-PLOT_DIR = '/Users/nityaravi/Documents/GitHub/GV_classification/'
+PLOT_DIR = GV_FOLDER + 'cog_plots/'
 
 # location to save covariance matrices
-COV_FOLDER = '/Users/nityaravi/Documents/GitHub/GV_classification/'
+COV_FOLDER = GV_FOLDER + 'cov_matrices/'
 
 # nsa table
-NSA_FN = DATA_FOLDER + 'nsa_v1_0_1.fits'
+NSA_FN = '/global/cfs/projectdirs/sdss/data/sdss/dr17/sdss/atlas/v1/nsa_v1_0_1.fits'
 
 # new table save loc
-COG_SAVE_FN = 'test_cog.fits'
+COG_SAVE_FN = GV_FOLDER + 'nsa_v1_0_1_cd.fits'
 
 # read in nsa table
 NSA = Table.read(NSA_FN, format='fits')
 
-NSA = NSA[37630:37632]
 
 # add columns to table
 new_cols = ['g_mtot', 'g_m0', 'g_a1', 'g_a2', 
@@ -75,14 +75,16 @@ for i in range(len(NSA)):
     count += 1
 
     iauname = NSA['IAUNAME'][i]
+    subdir = NSA['SUBDIR'][i]
+    pid = NSA['PID'][i]
     Rpet = NSA['ELPETRO_THETA'][i]
 
     ############################################################################
     # get curve of growth files
     # --------------------------------------------------------------------------
 
-    i_r, i_f = extract_cog_data(iauname, 'i', COG_FOLDER)
-    g_r, g_f = extract_cog_data(iauname, 'g', COG_FOLDER)
+    i_r, i_f = extract_cog_data(iauname, subdir, pid, 'i', COG_FOLDER)
+    g_r, g_f = extract_cog_data(iauname, subdir, pid, 'g', COG_FOLDER)
 
     if i_r is None or g_r is None:
 

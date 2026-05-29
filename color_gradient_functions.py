@@ -123,7 +123,7 @@ def flux_from_pogson_mag(mag):
     return f
 
 
-def extract_cog_data(iauname, sdss_filter, DATA_FOLDER):
+def extract_cog_data(iauname, subdir, pid, sdss_filter, DATA_FOLDER):
 
     '''
     
@@ -153,7 +153,10 @@ def extract_cog_data(iauname, sdss_filter, DATA_FOLDER):
     
     '''
 
-    fn = DATA_FOLDER + '/' + iauname + '-8-' + sdss_filter + '-cog.fits'
+
+    fn = DATA_FOLDER + '/' + subdir + '/atlases/' + str(pid) + '/' + iauname +'-' + str(pid) + '-' + sdss_filter + '-cog.fits'
+
+    # fn = DATA_FOLDER + '/' + iauname + '-8-' + sdss_filter + '-cog.fits'
 
     try:
 
@@ -223,7 +226,7 @@ def plot_curve_of_growth(i_radius, i_flux, g_radius, g_flux, i_mag_fit,
 
 
 
-def calculate_color_gradient(i_flux, g_flux, i_radius, g_radius, Rpet, 
+def calculate_color_gradient(i_flux, g_flux, i_radius, g_radius, Rpet, R90,
                              iauname, PLOT_DIR):
     
 
@@ -247,6 +250,9 @@ def calculate_color_gradient(i_flux, g_flux, i_radius, g_radius, Rpet,
 
     Rpet : float
         petrosian radius in arcsec
+
+    R90: float
+        90% light radius in arcsec
 
     iauname : str
         galaxy iauname
@@ -275,6 +281,18 @@ def calculate_color_gradient(i_flux, g_flux, i_radius, g_radius, Rpet,
     
     '''
 
+    # only consider data points within 2*R90 -- to avoid issues w decreasing cogs
+
+    i_mask = i_radius < 2*R90
+    g_mask = g_radius < 2*R90
+
+    i_flux = i_flux[i_mask]
+    i_radius = i_radius[i_mask]
+
+    g_flux = g_flux[g_mask]
+    g_radius = g_radius[g_mask]
+    
+
     # convert i and g fluxes to pogson magnitudes
 
     i_mag = pogson_mag_from_flux(i_flux)
@@ -284,11 +302,13 @@ def calculate_color_gradient(i_flux, g_flux, i_radius, g_radius, Rpet,
 
     i_mag_fit, i_mag_cov = curve_fit(SGA_cog, 
                                      i_radius, 
-                                     i_mag)
+                                     i_mag,
+                                    p0 = [np.min(i_mag), np.max(i_mag), 1,1])
     
     g_mag_fit, g_mag_cov = curve_fit(SGA_cog, 
                                      g_radius, 
-                                     g_mag)
+                                     g_mag,
+                                    p0 = [np.min(g_mag), np.max(g_mag), 1,1])
     
     # plot cog
     
@@ -336,3 +356,4 @@ def calculate_color_gradient(i_flux, g_flux, i_radius, g_radius, Rpet,
     cd = delta_g - delta_i
 
     return i_mag_fit, i_mag_cov, g_mag_fit, g_mag_cov, cd
+
