@@ -4,3 +4,4 @@
 *.png
 *.fits
 *.npy
+/.ipynb_checkpoints
