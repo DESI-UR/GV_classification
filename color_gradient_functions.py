@@ -45,6 +45,62 @@ def SGA_cog(r, mtot, m0, a1, a2):
     return m
 
 
+def r_pct_SGA_cog(pct, mtot, m0, a1, a2):
+    '''
+
+    calculate pct% light radius using SGA cog parameters
+
+    PARAMETERS
+    ==========
+
+    pct: float
+        value in (0,100)
+        
+    mtot : float
+        from SGA cog params
+        
+    m0 : float
+        from SGA cog params
+        
+    a1 : float
+        from SGA cog params
+
+    a2 : float
+        from SGA cog params
+        
+    RETURNS
+    =======
+    r_pct : float
+        radius containing pct of the galaxy's light
+        e.g. for pct = 90, returns R90
+    '''
+
+    r_pct = 10*(1/a1 * (np.exp(-np.log10(pct/100)/(0.4*m0)) - 1))**(-1/a2)
+
+    return r_pct
+
+def calc_cinv(R50, R90):
+    '''
+    calculate inverse concentration index
+
+    PARAMETERS
+    ==========
+    R50 : float
+        half-light radius
+
+    R90 : float
+        90% light radius
+
+    RETURNS
+    =======
+    cinv : float
+        inverse concentaration index R50/R90
+
+    '''
+
+
+    return R50/R90
+    
 
 def asinh_mag_from_flux(flux, sdss_filter):
     '''
@@ -283,8 +339,8 @@ def calculate_color_gradient(i_flux, g_flux, i_radius, g_radius, Rpet, R90,
 
     # only consider data points within 2*R90 -- to avoid issues w decreasing cogs
 
-    i_mask = i_radius < 2*R90
-    g_mask = g_radius < 2*R90
+    i_mask = i_radius < R90
+    g_mask = g_radius < R90
 
     i_flux = i_flux[i_mask]
     i_radius = i_radius[i_mask]

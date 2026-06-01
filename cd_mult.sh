@@ -5,7 +5,7 @@
 #SBATCH -J cd_mult
 #SBATCH --mail-user=nravi3@ur.rochester.edu
 #SBATCH --mail-type=ALL
-#SBATCH -t 24:00:00
+#SBATCH -t 3:00:00
 #SBATCH -o /pscratch/sd/n/nravi/GV_classification/cd_calc_mult.out
 #SBATCH -e /pscratch/sd/n/nravi/GV_classification/cd_calc_mult.err
 
